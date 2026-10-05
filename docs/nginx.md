@@ -23,7 +23,7 @@ upstream odoo_forward_auth_backend {
 ```nginx
 location = /_forward_auth {
     internal;
-    proxy_pass http://odoo/odoo-forward-auth/auth;
+    proxy_pass http://odoo_forward_auth_backend/odoo-forward-auth/auth;
     proxy_pass_request_body off;
     proxy_set_header Content-Length "";
     proxy_set_header Cookie $http_cookie;
