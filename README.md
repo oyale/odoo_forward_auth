@@ -73,7 +73,7 @@ matches your Odoo version:
 `main` mirrors `16.0` and is kept as the default branch. The settings-view
 extension differs between series, so use the branch that matches your Odoo
 version. The `19.0` branch also renames the user group field (`groups_id` →
-`group_ids`).
+`group_ids`); authorization uses `all_group_ids` so inherited memberships count.
 
 ## Tests
 

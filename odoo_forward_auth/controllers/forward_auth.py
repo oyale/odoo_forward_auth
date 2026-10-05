@@ -25,7 +25,7 @@ class ForwardAuth(http.Controller):
         allowed = (
             user.has_group("base.group_user")
             and group is not None
-            and group in user.group_ids
+            and group in user.all_group_ids
         )
         response.status_code = 204 if allowed else 401
         return response

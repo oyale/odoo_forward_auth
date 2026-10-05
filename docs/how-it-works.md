@@ -28,7 +28,8 @@ and audit than a dynamic one.
 ## Internal user and group
 
 The endpoint allows a request when the user belongs to `base.group_user`
-(internal) and is a member of the configured group. The group is mandatory: if
+(internal) and is a member of the configured group, directly or through an implied group.
+On Odoo 19, this uses `all_group_ids` to include effective membership. The group is mandatory: if
 none is configured, every request is denied. The public user is never internal,
 so anonymous requests always fail.
 

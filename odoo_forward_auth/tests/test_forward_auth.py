@@ -49,6 +49,37 @@ class TestForwardAuth(HttpCase):
         self.assertEqual(response.status_code, 204)
         self.assertIn("no-store", response.headers["Cache-Control"])
 
+    def _authenticate_inherited_member(self):
+        group = self._configure_group()
+        role = self.env["res.groups"].create({
+            "name": "Forward Auth Role",
+            "implied_ids": [(4, group.id)],
+        })
+        user = new_test_user(
+            self.env, login="fa_inherited", password="test", groups="base.group_user"
+        )
+        user.write({"group_ids": [(4, role.id)]})
+        self.assertNotIn(group, user.group_ids)
+        self.assertIn(group, user.all_group_ids)
+        self.authenticate("fa_inherited", "test")
+        return user, role, group
+
+    def test_inherited_membership_is_allowed(self):
+        self._authenticate_inherited_member()
+        self.assertEqual(self.url_open("/odoo-forward-auth/auth").status_code, 204)
+
+    def test_inherited_membership_revoked_with_role(self):
+        user, role, _ = self._authenticate_inherited_member()
+        self.assertEqual(self.url_open("/odoo-forward-auth/auth").status_code, 204)
+        user.write({"group_ids": [(3, role.id)]})
+        self.assertEqual(self.url_open("/odoo-forward-auth/auth").status_code, 401)
+
+    def test_inherited_membership_revoked_with_implication(self):
+        _, role, group = self._authenticate_inherited_member()
+        self.assertEqual(self.url_open("/odoo-forward-auth/auth").status_code, 204)
+        role.write({"implied_ids": [(3, group.id)]})
+        self.assertEqual(self.url_open("/odoo-forward-auth/auth").status_code, 401)
+
     def test_non_internal_user_with_group_is_denied(self):
         group = self._configure_group()
         portal = new_test_user(
