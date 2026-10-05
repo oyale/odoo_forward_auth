@@ -1,7 +1,9 @@
 # Copyright 2026 odoo-forward-auth contributors
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 import os
+from urllib.parse import urlparse
 
+from odoo.tests import common as odoo_tests_common
 from odoo.tests.common import HttpCase, new_test_user, tagged
 
 from odoo.addons.odoo_forward_auth.controllers.forward_auth import PARAM_GROUP
@@ -9,6 +11,14 @@ from odoo.addons.odoo_forward_auth.controllers.forward_auth import PARAM_GROUP
 
 @tagged("post_install", "-at_install")
 class TestForwardAuth(HttpCase):
+    @classmethod
+    def _request_handler(cls, s, r, /, **kw):
+        # Odoo 17+ blocks external HTTP in tests; allow the integration proxy.
+        proxy_host = urlparse(os.environ.get("FORWARD_AUTH_PROXY_URL", "")).hostname
+        if proxy_host and urlparse(r.url).hostname == proxy_host:
+            return odoo_tests_common._super_send(s, r, **kw)
+        return super()._request_handler(s, r, **kw)
+
     def test_anonymous_is_denied(self):
         response = self.url_open("/odoo-forward-auth/auth")
         self.assertEqual(response.status_code, 401)
