@@ -9,7 +9,10 @@ subrequest. The endpoint reads the caller's Odoo session and answers:
 
 * ``204`` when the user is an internal user and belongs to the configured
   group;
-* ``401`` in every other case, including when no group is configured.
+* ``401`` for an authorization denial, including when no group is configured.
+
+Framework or infrastructure errors can return other status codes; Nginx denies
+access when the authorization subrequest does not return a 2xx response.
 
 Compatibility
 =============
@@ -40,6 +43,18 @@ Nginx
 Point the internal authorization location at the endpoint and protect the
 service prefix with ``auth_request``. See the repository ``examples/`` directory
 and ``docs/nginx.md``.
+
+Security boundary
+=================
+
+Use the same-origin proxy example only for applications trusted as highly as
+Odoo. JavaScript served by the protected application can make authenticated Odoo
+requests; stripping the upstream cookie does not isolate that browser content.
+
+The proxy restricts HTTP methods and disables WebSocket upgrades by default.
+Read-only behavior must also be enforced by the application. Revocation applies
+to subsequent requests and does not terminate existing streams or connections.
+See ``docs/security.md`` for the complete trust and revocation requirements.
 
 Tests
 =====

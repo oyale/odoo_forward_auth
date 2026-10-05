@@ -9,8 +9,11 @@ Paste each into the matching context of your Nginx configuration. Replace:
 
 - `127.0.0.1:8069` with your Odoo upstream;
 - `/app/` with the prefix of the service you are protecting;
-- `127.0.0.1:8025` with your service's upstream;
-- sign in at `/web/login` before revisiting the protected prefix.
+- `127.0.0.1:8025` with your service's upstream.
+
+Sign in at `/web/login` before revisiting the protected prefix. Review the
+[deployment requirements](../docs/nginx.md#deployment-requirements), including
+cookie scope and the shared-origin trust boundary, before enabling the proxy.
 
 Notes:
 
