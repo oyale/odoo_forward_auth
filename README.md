@@ -65,10 +65,10 @@ matches your Odoo version:
 
 | Branch | Odoo | Integration tests |
 |--------|------|-------------------|
-| [`16.0`](https://github.com/oyale/odoo_forward_auth/tree/16.0) | 16.0 | passing |
-| [`17.0`](https://github.com/oyale/odoo_forward_auth/tree/17.0) | 17.0 | passing |
-| [`18.0`](https://github.com/oyale/odoo_forward_auth/tree/18.0) | 18.0 | passing |
-| [`19.0`](https://github.com/oyale/odoo_forward_auth/tree/19.0) | 19.0 | passing |
+| [`16.0`](https://github.com/oyale/odoo_forward_auth/tree/16.0) | 16.0 | [![Integration 16.0](https://github.com/oyale/odoo_forward_auth/actions/workflows/integration.yml/badge.svg?branch=16.0&event=push)](https://github.com/oyale/odoo_forward_auth/actions/workflows/integration.yml?query=branch%3A16.0+event%3Apush) |
+| [`17.0`](https://github.com/oyale/odoo_forward_auth/tree/17.0) | 17.0 | [![Integration 17.0](https://github.com/oyale/odoo_forward_auth/actions/workflows/integration.yml/badge.svg?branch=17.0&event=push)](https://github.com/oyale/odoo_forward_auth/actions/workflows/integration.yml?query=branch%3A17.0+event%3Apush) |
+| [`18.0`](https://github.com/oyale/odoo_forward_auth/tree/18.0) | 18.0 | [![Integration 18.0](https://github.com/oyale/odoo_forward_auth/actions/workflows/integration.yml/badge.svg?branch=18.0&event=push)](https://github.com/oyale/odoo_forward_auth/actions/workflows/integration.yml?query=branch%3A18.0+event%3Apush) |
+| [`19.0`](https://github.com/oyale/odoo_forward_auth/tree/19.0) | 19.0 | [![Integration 19.0](https://github.com/oyale/odoo_forward_auth/actions/workflows/integration.yml/badge.svg?branch=19.0&event=push)](https://github.com/oyale/odoo_forward_auth/actions/workflows/integration.yml?query=branch%3A19.0+event%3Apush) |
 
 `main` mirrors `16.0` and is kept as the default branch. The settings-view
 extension differs between series, so use the branch that matches your Odoo
