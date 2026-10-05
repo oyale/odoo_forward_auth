@@ -12,6 +12,14 @@ Most distribution packages include it; source builds may not.
 
 ## The authorization location
 
+Define the Odoo upstream in the `http` context (the snippets below reference it):
+
+```nginx
+upstream odoo_forward_auth_backend {
+    server 127.0.0.1:8069;
+}
+```
+
 ```nginx
 location = /_forward_auth {
     internal;
