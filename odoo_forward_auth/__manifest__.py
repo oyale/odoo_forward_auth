@@ -4,7 +4,7 @@
     "version": "16.0.1.0.0",
     "license": "AGPL-3",
     "author": "odoo-forward-auth contributors",
-    "website": "https://github.com/odoo-forward-auth/odoo-forward-auth",
+    "website": "https://github.com/oyale/odoo_forward_auth",
     "category": "Hidden/Tools",
     "depends": ["base"],
     "data": [
