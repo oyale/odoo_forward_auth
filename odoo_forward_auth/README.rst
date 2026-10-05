@@ -17,6 +17,15 @@ Configuration
 Install the module, then open **Settings > General Settings > Forward Auth** and
 pick the **Authorized group**. It is required: with no group, every request is denied.
 
+Demo data
+=========
+
+Databases created with demo data also load an example group
+**Forward Auth (example)** and a demo user (``demo.forward.auth``) that belongs to
+it. Select that group in **Settings > General Settings > Forward Auth** to try the
+flow end to end. The group is a reference only; production databases must define
+and select their own group.
+
 Nginx
 =====
 

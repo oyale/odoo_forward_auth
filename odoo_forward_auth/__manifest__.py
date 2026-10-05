@@ -11,6 +11,9 @@
         "data/ir_config_parameter.xml",
         "views/res_config_settings_views.xml",
     ],
+    "demo": [
+        "demo/forward_auth_demo.xml",
+    ],
     "installable": True,
     "application": False,
 }
