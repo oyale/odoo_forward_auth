@@ -2,6 +2,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 from odoo.tests.common import HttpCase, new_test_user, tagged
 
+from odoo.addons.odoo_forward_auth.controllers.forward_auth import PARAM_GROUP
+
 
 @tagged("post_install", "-at_install")
 class TestForwardAuth(HttpCase):
@@ -11,9 +13,7 @@ class TestForwardAuth(HttpCase):
 
     def _configure_group(self):
         group = self.env["res.groups"].create({"name": "Forward Auth Test"})
-        self.env["ir.config_parameter"].sudo().set_param(
-            "odoo_forward_auth.group_id", group.id
-        )
+        self.env["ir.config_parameter"].sudo().set_param(PARAM_GROUP, group.id)
         return group
 
     def test_internal_user_without_required_group_is_denied(self):
@@ -36,9 +36,7 @@ class TestForwardAuth(HttpCase):
         self.assertEqual(response.status_code, 204)
 
     def test_internal_user_without_configured_group_is_denied(self):
-        self.env["ir.config_parameter"].sudo().set_param(
-            "odoo_forward_auth.group_id", ""
-        )
+        self.env["ir.config_parameter"].sudo().set_param(PARAM_GROUP, "")
         new_test_user(
             self.env, login="fa_any", password="test", groups="base.group_user"
         )
