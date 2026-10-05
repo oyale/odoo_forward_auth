@@ -68,5 +68,10 @@ For a disposable database and real Nginx integration coverage, run from the
 repository root::
 
     sh tests/integration/run.sh
+    FORWARD_AUTH_DEMO=1 sh tests/integration/run.sh
 
 See ``tests/integration/README.md`` for prerequisites and coverage.
+
+Both modes check installation and a same-series addon update with a saved access
+policy. Cross-major Odoo database migration must be performed separately before
+using the addon branch matching the target version.
