@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <record id="res_config_settings_view_form" model="ir.ui.view">
-        <field name="name">res.config.settings.form.inherit.odoo.forward.auth</field>
+        <field name="name">res.config.settings.view.form.inherit.odoo.forward.auth</field>
         <field name="model">res.config.settings</field>
+        <field name="priority" eval="10" />
         <field name="inherit_id" ref="base.res_config_settings_view_form" />
         <field name="arch" type="xml">
-            <xpath expr="//form" position="inside">
-                <app string="Forward Auth" name="odoo_forward_auth">
-                    <block title="Forward Auth">
-                        <setting
-                            string="Authorized group"
-                            help="Only members of this group may pass the Nginx forward-auth check. Required: with no group, every request is denied."
-                        >
-                            <field name="odoo_forward_auth_group_id" />
-                        </setting>
-                    </block>
-                </app>
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div
+                    class="app_settings_block"
+                    string="Forward Auth"
+                    data-string="Forward Auth"
+                    data-key="odoo_forward_auth"
+                    groups="base.group_system"
+                >
+                    <h2>Forward Auth</h2>
+                    <div class="row mt16 o_settings_container" name="odoo_forward_auth_setting_container">
+                        <div class="col-12 col-lg-6 o_setting_box" id="odoo_forward_auth_group">
+                            <div class="o_setting_right_pane">
+                                <label for="odoo_forward_auth_group_id" string="Authorized group" />
+                                <div class="text-muted">
+                                    Only members of this group may pass the Nginx forward-auth check.
+                                    Required: with no group, every request is denied.
+                                </div>
+                                <div class="content-group">
+                                    <field name="odoo_forward_auth_group_id" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </xpath>
         </field>
     </record>
