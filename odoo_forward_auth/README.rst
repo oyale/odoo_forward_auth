@@ -17,7 +17,7 @@ access when the authorization subrequest does not return a 2xx response.
 Compatibility
 =============
 
-Built and tested on **Odoo 16.0 only**. Other versions are untested.
+Built and tested on **Odoo 17.0**. Use the branch matching your Odoo series.
 
 Configuration
 =============

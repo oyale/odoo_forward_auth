@@ -1,7 +1,7 @@
 {
     "name": "Odoo Forward Auth",
     "summary": "Authorization endpoint for Nginx auth_request using the Odoo session.",
-    "version": "16.0.1.0.0",
+    "version": "17.0.1.0.0",
     "license": "AGPL-3",
     "author": "odoo-forward-auth contributors",
     "website": "https://github.com/oyale/odoo_forward_auth",
