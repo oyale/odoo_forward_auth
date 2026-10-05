@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data noupdate="1">
+        <record id="forward_auth_privilege" model="res.groups.privilege">
+            <field name="name">Forward Auth</field>
+            <field name="category_id" ref="base.module_category_hidden" />
+        </record>
         <record id="group_forward_auth_demo" model="res.groups">
             <field name="name">Forward Auth (example)</field>
             <field name="comment">Example group for odoo-forward-auth; loaded only in databases with demo data. Pick this group in General Settings to try the flow.</field>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
-            <field name="category_id" ref="base.module_category_hidden" />
+            <field name="privilege_id" ref="forward_auth_privilege" />
         </record>
     </data>
 </odoo>

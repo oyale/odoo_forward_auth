@@ -33,7 +33,7 @@ class TestForwardAuth(HttpCase):
         member = new_test_user(
             self.env, login="fa_member", password="test", groups="base.group_user"
         )
-        member.write({"groups_id": [(4, group.id)]})
+        member.write({"group_ids": [(4, group.id)]})
         self.authenticate("fa_member", "test")
         response = self.url_open("/odoo-forward-auth/auth")
         self.assertEqual(response.status_code, 204)
@@ -44,7 +44,7 @@ class TestForwardAuth(HttpCase):
         portal = new_test_user(
             self.env, login="fa_portal", password="test", groups="base.group_portal"
         )
-        portal.write({"groups_id": [(4, group.id)]})
+        portal.write({"group_ids": [(4, group.id)]})
         self.authenticate("fa_portal", "test")
         response = self.url_open("/odoo-forward-auth/auth")
         self.assertEqual(response.status_code, 401)
@@ -63,7 +63,7 @@ class TestForwardAuth(HttpCase):
         user = new_test_user(
             self.env, login="fa_lifecycle", password="test", groups="base.group_user"
         )
-        user.write({"groups_id": [(4, group.id)]})
+        user.write({"group_ids": [(4, group.id)]})
         self.authenticate("fa_lifecycle", "test")
         return user, group
 
@@ -81,7 +81,7 @@ class TestForwardAuth(HttpCase):
     def test_membership_revocation(self):
         user, group = self._authenticate_member()
         self.assertEqual(self.url_open("/odoo-forward-auth/auth").status_code, 204)
-        user.write({"groups_id": [(3, group.id)]})
+        user.write({"group_ids": [(3, group.id)]})
         self.assertEqual(self.url_open("/odoo-forward-auth/auth").status_code, 401)
 
     def test_logout(self):
@@ -134,5 +134,5 @@ class TestForwardAuth(HttpCase):
             self.url_open(proxy + "/_forward_auth", headers=headers).status_code, 404
         )
         self.assertEqual(self.url_open(proxy + ":8081/app/", headers=headers).status_code, 500)
-        user.write({"groups_id": [(3, group.id)]})
+        user.write({"group_ids": [(3, group.id)]})
         self.assertEqual(self.url_open(proxy + "/app/", headers=headers).status_code, 401)

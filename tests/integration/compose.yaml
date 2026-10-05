@@ -27,7 +27,7 @@ services:
       - upstream
       - odoo
   odoo:
-    image: odoo:18.0
+    image: odoo:19.0
     environment:
       HOST: db
       USER: odoo

@@ -42,7 +42,7 @@ sequenceDiagram
 
 ## Repository layout
 
-- `odoo_forward_auth/` — installable Odoo 18 addon with the authorization route.
+- `odoo_forward_auth/` — installable Odoo 19 addon with the authorization route.
 - `examples/` — annotated Nginx configuration.
 - `docs/` — [how it works](docs/how-it-works.md),
   [Nginx reference](docs/nginx.md),
@@ -60,7 +60,7 @@ sequenceDiagram
 
 ## Compatibility
 
-Built and tested on **Odoo 18.0**. Use the branch that matches your Odoo series:
+Built and tested on **Odoo 19.0**. Use the branch that matches your Odoo series:
 `16.0`, `17.0`, `18.0`, `19.0`. Other versions are untested.
 
 ## Tests
