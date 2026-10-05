@@ -13,5 +13,5 @@ jobs:
     env:
       FORWARD_AUTH_DEMO: ${{ matrix.demo }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - run: sh tests/integration/run.sh
