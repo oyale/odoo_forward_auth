@@ -60,9 +60,20 @@ sequenceDiagram
 
 ## Compatibility
 
-Built and tested on **Odoo 16.0 only**. Other versions are untested — the
-settings-view extension in particular differs between Odoo versions. Support for
-newer versions is not provided yet.
+This repository ships one branch per Odoo series. Check out the branch that
+matches your Odoo version:
+
+| Branch | Odoo | Integration tests |
+|--------|------|-------------------|
+| [`16.0`](https://github.com/oyale/odoo_forward_auth/tree/16.0) | 16.0 | passing |
+| [`17.0`](https://github.com/oyale/odoo_forward_auth/tree/17.0) | 17.0 | passing |
+| [`18.0`](https://github.com/oyale/odoo_forward_auth/tree/18.0) | 18.0 | passing |
+| [`19.0`](https://github.com/oyale/odoo_forward_auth/tree/19.0) | 19.0 | passing |
+
+`main` mirrors `16.0` and is kept as the default branch. The settings-view
+extension differs between series, so use the branch that matches your Odoo
+version. The `19.0` branch also renames the user group field (`groups_id` →
+`group_ids`).
 
 ## Tests
 
