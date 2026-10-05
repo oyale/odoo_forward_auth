@@ -52,8 +52,9 @@ sequenceDiagram
 
 1. Install the addon and set the authorized group in
    **Settings > General Settings > Forward Auth**.
-2. Add the contents of `examples/nginx-forward-auth.conf` to your vhost,
-   adjusting the upstreams and prefix.
+2. Add `examples/nginx-forward-auth-http.conf` in Nginx's `http` context and
+   `examples/nginx-forward-auth.conf` inside your Odoo `server` block, adjusting
+   the upstreams and prefix. Review the [deployment requirements](docs/nginx.md#deployment-requirements).
 3. `nginx -t && systemctl reload nginx`.
 4. Visit the protected prefix with an Odoo session that belongs to the group.
 

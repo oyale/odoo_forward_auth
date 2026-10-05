@@ -24,6 +24,9 @@ upstream odoo_forward_auth_backend {
 location = /_forward_auth {
     internal;
     proxy_pass http://odoo_forward_auth_backend/odoo-forward-auth/auth;
+    proxy_cache off;
+    proxy_connect_timeout 3s;
+    proxy_read_timeout 10s;
     proxy_pass_request_body off;
     proxy_set_header Content-Length "";
     proxy_set_header Cookie $http_cookie;
@@ -46,7 +49,9 @@ location = /_forward_auth {
 
 ```nginx
 location ^~ /app/ {
+    satisfy all;
     auth_request /_forward_auth;
+    proxy_cache off;
     limit_except GET HEAD { deny all; }
     proxy_pass http://127.0.0.1:8025;
     proxy_set_header Cookie "";
@@ -85,13 +90,28 @@ map $http_upgrade $connection_upgrade {
 Then replace the empty Upgrade and Connection headers in the protected location
 with `$http_upgrade` and `$connection_upgrade`, respectively.
 
-## Optional: redirect to the Odoo login
+## Login and denial behavior
 
-```nginx
-error_page 401 = @odoo_login;
-location @odoo_login {
-    return 302 https://$host/web/login?redirect=$request_uri;
-}
-```
+Denials remain 401, including users already logged in without the required group.
+Sign in at `/web/login`, then revisit the protected URL. Automatic login redirects
+are deliberately omitted: the endpoint does not distinguish missing login from
+missing permission, and an unescaped `$request_uri` corrupts nested query values.
 
-This changes the UX only. The authorization decision is unchanged.
+## Deployment requirements
+
+- Include both example files in their respective contexts. Use the same HTTPS
+  hostname as Odoo, with the session cookie path covering the protected prefix.
+- Configure Odoo database selection (`dbfilter`) for that hostname. In multi-worker
+  or multi-instance installations, authorization requests must reach the same
+  session store and database as login requests.
+- Keep the service inaccessible except through the proxy. Review the complete
+  vhost for alternative routes, nested locations, and inherited access rules.
+  `satisfy all` ensures an inherited `satisfy any` cannot bypass authorization.
+- Authorization and protected-response proxy caching are explicitly disabled.
+  Review any CDN or other cache in front of Nginx as well.
+- The example bounds authorization connection and read inactivity to 3s and 10s.
+  Tune these against measured latency. Every protected request, including assets,
+  consumes Odoo capacity; load-test representative concurrency and apply suitable
+  edge rate limits. Do not use a shared cached authorization decision to reduce load.
+- One configured group applies to all services using this database's endpoint.
+  The upstream receives no user identity or Odoo record permissions.

@@ -10,7 +10,7 @@ Paste each into the matching context of your Nginx configuration. Replace:
 - `127.0.0.1:8069` with your Odoo upstream;
 - `/app/` with the prefix of the service you are protecting;
 - `127.0.0.1:8025` with your service's upstream;
-- optionally uncomment the `error_page` block to redirect to the Odoo login.
+- sign in at `/web/login` before revisiting the protected prefix.
 
 Notes:
 
