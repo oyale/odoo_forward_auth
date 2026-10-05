@@ -53,6 +53,12 @@ sequenceDiagram
 3. `nginx -t && systemctl reload nginx`.
 4. Visit the protected prefix with an Odoo session that belongs to the group.
 
+## Compatibility
+
+Built and tested on **Odoo 16.0 only**. Other versions are untested — the
+settings-view extension in particular differs between Odoo versions. Support for
+newer versions is not provided yet.
+
 ## License
 
 AGPL-3.0. See [LICENSE](LICENSE).

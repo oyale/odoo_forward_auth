@@ -11,6 +11,11 @@ subrequest. The endpoint reads the caller's Odoo session and answers:
   group;
 * ``401`` in every other case, including when no group is configured.
 
+Compatibility
+=============
+
+Built and tested on **Odoo 16.0 only**. Other versions are untested.
+
 Configuration
 =============
 
