@@ -31,8 +31,9 @@ sequenceDiagram
    `session_id` cookie.
 2. Nginx sends an **internal** subrequest to the Odoo authorization endpoint,
    forwarding the cookie and stripping the body.
-3. Odoo loads the session and checks "internal user" and, if configured,
-   "member of group". It answers `204` or `401`.
+3. Odoo loads the session and checks the "internal user" condition and
+   membership of the configured group. It answers `204` or `401`; with no group
+   configured, every request is denied.
 4. On `204` only, Nginx proxies the original request to the protected upstream.
 
 ## Repository layout
