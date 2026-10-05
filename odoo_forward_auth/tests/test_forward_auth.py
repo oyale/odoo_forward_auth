@@ -120,29 +120,42 @@ class TestForwardAuth(HttpCase):
             self.skipTest("Run tests/integration/run.sh for real Nginx coverage")
         self.assertEqual(self.url_open(proxy + "/app/").status_code, 401)
         user, group = self._authenticate_member()
-        # Include the test-cursor cookie so proxy requests share this transaction.
-        cookie = "; ".join(
-            f"{key}={value}" for key, value in self.opener.cookies.items()
-        )
-        headers = {"Cookie": cookie, "Authorization": "Bearer synthetic"}
-        response = self.url_open(proxy + "/app/", headers=headers)
-        self.assertEqual(response.status_code, 200)
-        echoed = {key.lower(): value for key, value in response.json().items()}
-        self.assertNotIn("cookie", echoed)
-        self.assertNotIn("authorization", echoed)
-        upgraded = self.url_open(
-            proxy + "/app/",
-            headers={**headers, "Upgrade": "websocket", "Connection": "Upgrade"},
-        )
-        self.assertEqual(upgraded.status_code, 200)
-        self.assertNotIn("upgrade", {key.lower() for key in upgraded.json()})
-        self.assertEqual(
-            self.url_open(proxy + "/app/", data="write", headers=headers).status_code,
-            403,
-        )
-        self.assertEqual(
-            self.url_open(proxy + "/_forward_auth", headers=headers).status_code, 404
-        )
-        self.assertEqual(self.url_open(proxy + ":8081/app/", headers=headers).status_code, 500)
-        user.write({"group_ids": [(3, group.id)]})
-        self.assertEqual(self.url_open(proxy + "/app/", headers=headers).status_code, 401)
+        # Odoo 19 opens a test cursor per request keyed by the test-cursor
+        # cookie; an explicit Cookie header drops that cookie. Allow all
+        # requests for this scope so the proxy subrequests are not rejected.
+        with self.allow_requests(all_requests=True):
+            cookie = "; ".join(
+                f"{key}={value}" for key, value in self.opener.cookies.items()
+            )
+            headers = {"Cookie": cookie, "Authorization": "Bearer synthetic"}
+            response = self.url_open(proxy + "/app/", headers=headers)
+            self.assertEqual(response.status_code, 200)
+            echoed = {key.lower(): value for key, value in response.json().items()}
+            self.assertNotIn("cookie", echoed)
+            self.assertNotIn("authorization", echoed)
+            upgraded = self.url_open(
+                proxy + "/app/",
+                headers={**headers, "Upgrade": "websocket", "Connection": "Upgrade"},
+            )
+            self.assertEqual(upgraded.status_code, 200)
+            self.assertNotIn("upgrade", {key.lower() for key in upgraded.json()})
+            self.assertEqual(
+                self.url_open(
+                    proxy + "/app/", data="write", headers=headers
+                ).status_code,
+                403,
+            )
+            self.assertEqual(
+                self.url_open(
+                    proxy + "/_forward_auth", headers=headers
+                ).status_code,
+                404,
+            )
+            self.assertEqual(
+                self.url_open(proxy + ":8081/app/", headers=headers).status_code,
+                500,
+            )
+            user.write({"group_ids": [(3, group.id)]})
+            self.assertEqual(
+                self.url_open(proxy + "/app/", headers=headers).status_code, 401
+            )
