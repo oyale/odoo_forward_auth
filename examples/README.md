@@ -1,6 +1,11 @@
 # Nginx example
 
-`nginx-forward-auth.conf` is a copy-paste starting point. Replace:
+Two context-specific files:
+
+- `nginx-forward-auth-http.conf` — `http`-context directives (`map`, `upstream`);
+- `nginx-forward-auth.conf` — `server`-context `location` blocks.
+
+Paste each into the matching context of your Nginx configuration. Replace:
 
 - `127.0.0.1:8069` with your Odoo upstream;
 - `/app/` with the prefix of the service you are protecting;
