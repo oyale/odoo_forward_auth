@@ -1,10 +1,8 @@
 version: 2
 updates:
+  # Only GitHub Actions. The container images in tests/integration/compose.yaml
+  # are pinned to the Odoo series of each branch and must not be bumped here.
   - package-ecosystem: github-actions
     directory: /
-    schedule:
-      interval: weekly
-  - package-ecosystem: docker-compose
-    directory: /tests/integration
     schedule:
       interval: weekly
