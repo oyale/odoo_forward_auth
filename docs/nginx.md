@@ -45,7 +45,16 @@ location ^~ /app/ {
     proxy_set_header Authorization "";
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "Upgrade";
+    proxy_set_header Connection $connection_upgrade;
+}
+```
+
+`map` must be defined in the `http` context (not inside `server`/`location`):
+
+```nginx
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
 }
 ```
 
