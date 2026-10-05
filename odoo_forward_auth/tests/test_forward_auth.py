@@ -35,6 +35,16 @@ class TestForwardAuth(HttpCase):
         response = self.url_open("/odoo-forward-auth/auth")
         self.assertEqual(response.status_code, 204)
 
+    def test_non_internal_user_with_group_is_denied(self):
+        group = self._configure_group()
+        portal = new_test_user(
+            self.env, login="fa_portal", password="test", groups="base.group_portal"
+        )
+        portal.write({"groups_id": [(4, group.id)]})
+        self.authenticate("fa_portal", "test")
+        response = self.url_open("/odoo-forward-auth/auth")
+        self.assertEqual(response.status_code, 401)
+
     def test_internal_user_without_configured_group_is_denied(self):
         self.env["ir.config_parameter"].sudo().set_param(PARAM_GROUP, "")
         new_test_user(
