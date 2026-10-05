@@ -25,11 +25,14 @@ pick the **Authorized group**. It is required: with no group, every request is d
 Demo data
 =========
 
-Databases created with demo data also load an example group
-**Forward Auth (example)** and a demo user (``demo.forward.auth``) that belongs to
-it. Select that group in **Settings > General Settings > Forward Auth** to try the
-flow end to end. The group is a reference only; production databases must define
-and select their own group.
+Databases created with demo data load only the example group
+**Forward Auth (example)**. Create a local test user with a unique password and
+assign the group explicitly to try the flow. No demonstration login is created.
+Production databases must define and select their own group.
+
+When upgrading a database that loaded an older version's demo data, archive the
+existing ``demo.forward.auth`` user and invalidate its sessions. Removing the XML
+record does not remove an existing ``noupdate`` account during an upgrade.
 
 Nginx
 =====
