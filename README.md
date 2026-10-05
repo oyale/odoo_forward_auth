@@ -78,8 +78,12 @@ version. The `19.0` branch also renames the user group field (`groups_id` →
 ## Tests
 
 Run `sh tests/integration/run.sh` with Docker and Docker Compose installed.
+Also run `FORWARD_AUTH_DEMO=1 sh tests/integration/run.sh` to check demo data.
 The [integration harness](tests/integration/README.md) installs the addon into a
-fresh database and checks the shipped proxy configuration. CI runs the same command.
+fresh database, checks the shipped proxy configuration, and verifies policy
+preservation after a same-series addon update. CI runs both demo modes.
+Cross-major database migration requires a separate supported migration process;
+these branches provide addon compatibility, not database conversion.
 
 ## License
 

@@ -183,3 +183,24 @@ class TestForwardAuth(HttpCase):
         self.assertEqual(
             self.url_open(proxy + "/app/", headers=headers).status_code, 401
         )
+
+    def test_demo_data_loaded(self):
+        if os.environ.get("FORWARD_AUTH_DEMO") != "1":
+            self.skipTest("Demo data is checked by the demo-enabled integration job")
+        group = self.env.ref("odoo_forward_auth.group_forward_auth_demo")
+        self.assertIn(self.env.ref("base.group_user"), group.implied_ids)
+        privilege = self.env.ref("odoo_forward_auth.forward_auth_privilege")
+        self.assertEqual(group.privilege_id, privilege)
+        self.assertEqual(privilege.category_id, self.env.ref("base.module_category_hidden"))
+
+    def test_update_preserves_policy(self):
+        if os.environ.get("FORWARD_AUTH_UPGRADE_CHECK") != "1":
+            self.skipTest("Policy preservation is checked after the addon update")
+        group = self.env.ref("forward_auth_upgrade_fixture.required_group")
+        user = self.env.ref("forward_auth_upgrade_fixture.member")
+        self.assertEqual(
+            self.env["ir.config_parameter"].sudo().get_param(PARAM_GROUP), str(group.id)
+        )
+        self.assertIn(group, user.all_group_ids)
+        self.authenticate(user.login, "integration-only")
+        self.assertEqual(self.url_open("/odoo-forward-auth/auth").status_code, 204)

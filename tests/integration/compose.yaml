@@ -33,20 +33,11 @@ services:
       USER: odoo
       PASSWORD: integration-only
       FORWARD_AUTH_PROXY_URL: http://nginx
-    command:
-      - odoo
-      - -d
-      - forward_auth_test
-      - -i
-      - odoo_forward_auth
-      - --without-demo=all
-      - --test-enable
-      - --test-tags=/odoo_forward_auth
-      - --stop-after-init
-      - --http-interface=0.0.0.0
-      - --db-filter=^forward_auth_test$$
+      FORWARD_AUTH_DEMO: ${FORWARD_AUTH_DEMO:-0}
+    command: [bash, /tests/odoo.sh]
     volumes:
       - ../../odoo_forward_auth:/mnt/extra-addons/odoo_forward_auth:ro
+      - .:/tests:ro
     depends_on:
       db:
         condition: service_healthy
