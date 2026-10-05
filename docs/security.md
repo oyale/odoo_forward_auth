@@ -12,6 +12,20 @@ The decision is only as strong as the Odoo session cookie. Protect that cookie
 (HTTPS, `Secure`/`HttpOnly`) and Odoo itself. This pattern does not compensate
 for a weak Odoo login.
 
+## Browser origin is a trust boundary
+
+The example serves the protected application under the same origin as Odoo.
+Only use it for applications trusted as highly as Odoo. JavaScript served under
+`/app/` can make authenticated requests to Odoo and read their responses. An XSS
+in that application can therefore act with the visiting user's Odoo permissions.
+Stripping the upstream Cookie header and setting HttpOnly do not prevent this.
+Review any rendering of external HTML, including inbox message previews.
+
+For less-trusted applications, use a separate browser origin with an
+origin-separated authentication flow (for example OIDC). Moving this snippet to
+another hostname is insufficient: host-only Odoo cookies will not follow it.
+Do not broaden the Odoo cookie domain as a substitute for that design.
+
 ## Unified denial
 
 The endpoint returns `401` for every denial, so a caller cannot tell whether an

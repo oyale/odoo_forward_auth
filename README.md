@@ -8,6 +8,10 @@ Nginx proxies or denies. No OIDC, no SAML, no change to the protected service.
 > adds no authentication factor. If you already run an OIDC/SAML provider, use
 > that instead. See [docs/security.md](docs/security.md).
 
+Use this only for applications trusted as highly as Odoo: the example shares
+Odoo's browser origin, so an XSS in the protected application can act as the
+visiting Odoo user. See the [trust boundary](docs/security.md#browser-origin-is-a-trust-boundary).
+
 ## How it works
 
 ```mermaid
