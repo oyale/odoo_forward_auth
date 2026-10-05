@@ -1,3 +1,5 @@
+# Copyright 2026 odoo-forward-auth contributors
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 from odoo.tests.common import HttpCase, new_test_user, tagged
 
 
