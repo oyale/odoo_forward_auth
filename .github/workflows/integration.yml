@@ -1,0 +1,11 @@
+name: Integration
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  odoo-nginx:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: sh tests/integration/run.sh

@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: integration-only
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U odoo -d postgres]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    tmpfs:
+      - /var/lib/postgresql/data
+  upstream:
+    image: python:3.11-slim
+    command: [python, /tests/upstream.py]
+    volumes:
+      - ./upstream.py:/tests/upstream.py:ro
+  nginx:
+    image: nginx:stable
+    entrypoint: [/bin/sh, /tests/nginx.sh]
+    volumes:
+      - ../../examples:/examples:ro
+      - ./nginx.sh:/tests/nginx.sh:ro
+    depends_on:
+      - upstream
+      - odoo
+  odoo:
+    image: odoo:16.0
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: integration-only
+      FORWARD_AUTH_PROXY_URL: http://nginx
+    command:
+      - odoo
+      - -d
+      - forward_auth_test
+      - -i
+      - odoo_forward_auth
+      - --without-demo=all
+      - --test-enable
+      - --test-tags=/odoo_forward_auth
+      - --stop-after-init
+      - --http-interface=0.0.0.0
+      - --db-filter=^forward_auth_test$$
+    volumes:
+      - ../../odoo_forward_auth:/mnt/extra-addons/odoo_forward_auth:ro
+    depends_on:
+      db:
+        condition: service_healthy

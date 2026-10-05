@@ -47,3 +47,10 @@ Tests
 .. code-block:: bash
 
     odoo-bin -d <db> -i odoo_forward_auth --test-enable --stop-after-init
+
+For a disposable database and real Nginx integration coverage, run from the
+repository root::
+
+    sh tests/integration/run.sh
+
+See ``tests/integration/README.md`` for prerequisites and coverage.

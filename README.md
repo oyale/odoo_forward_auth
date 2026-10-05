@@ -64,6 +64,12 @@ Built and tested on **Odoo 16.0 only**. Other versions are untested — the
 settings-view extension in particular differs between Odoo versions. Support for
 newer versions is not provided yet.
 
+## Tests
+
+Run `sh tests/integration/run.sh` with Docker and Docker Compose installed.
+The [integration harness](tests/integration/README.md) installs the addon into a
+fresh database and checks the shipped proxy configuration. CI runs the same command.
+
 ## License
 
 AGPL-3.0. See [LICENSE](LICENSE).
