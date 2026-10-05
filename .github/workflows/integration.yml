@@ -6,6 +6,12 @@ jobs:
   odoo-nginx:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        demo: ['0', '1']
+    env:
+      FORWARD_AUTH_DEMO: ${{ matrix.demo }}
     steps:
       - uses: actions/checkout@v5
       - run: sh tests/integration/run.sh
