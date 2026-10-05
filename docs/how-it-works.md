@@ -41,5 +41,4 @@ authorization location at a login route.
 ## Caching
 
 The authorization answer is per request and is not cached. Removing a user from
-the group takes effect on the next request. An already-open WebSocket is the one
-exception; see [security.md](security.md).
+the group takes effect on the next request. Existing WebSockets, downloads, and HTTP streams continue; see [security.md](security.md).

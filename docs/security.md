@@ -32,12 +32,16 @@ The endpoint returns `401` for every denial, so a caller cannot tell whether an
 account is internal or merely lacks the group. Only the authorized case is
 distinguishable (`204`), which any access check must reveal.
 
-## WebSocket sessions survive revocation
+## Connections survive revocation
 
-The subrequest runs on the handshake. Removing a user from the group does not
-close an already-open WebSocket; it stays alive until its timeout or disconnect.
-Shorten the relevant `proxy_read_timeout`, or terminate sessions in an
-operational layer, if immediate revocation matters.
+Authorization runs at the start of an HTTP request or WebSocket handshake.
+Revocation does not terminate existing WebSockets, downloads, or HTTP streams.
+`proxy_read_timeout` measures inactivity between reads, not total lifetime;
+traffic or heartbeat frames can keep a connection alive indefinitely.
+
+Where bounded revocation is required, enforce an absolute connection lifetime,
+periodically reauthorize in the application, or terminate active connections
+through an operational layer. The addon does not provide those mechanisms.
 
 ## Defense in depth for the upstream
 
@@ -54,8 +58,10 @@ broadly, and be deliberate about what data reaches the protected service.
 
 ## Method and path control
 
-Read-only access is enforced by the proxy (`limit_except`), not by Odoo. Leaving
-it out exposes any write endpoint the service offers.
+The proxy restricts HTTP methods with `limit_except`; this alone does not ensure
+read-only access. GET handlers can have side effects, and WebSocket messages are
+not subject to HTTP method restrictions. Enforce read-only permissions in the
+upstream application. Removing the restriction exposes other HTTP methods too.
 
 ## Fail closed
 

@@ -2,7 +2,7 @@
 
 Two context-specific files:
 
-- `nginx-forward-auth-http.conf` — `http`-context directives (`map`, `upstream`);
+- `nginx-forward-auth-http.conf` — `http`-context directives (`upstream`);
 - `nginx-forward-auth.conf` — `server`-context `location` blocks.
 
 Paste each into the matching context of your Nginx configuration. Replace:
@@ -17,5 +17,5 @@ Notes:
 - The `/_forward_auth` location is `internal`; clients cannot call it directly.
 - `auth_request` fails **closed**: any non-2xx answer from Odoo denies access.
 - The authorization answer is not cached; group changes apply on the next request.
-- `limit_except GET HEAD { deny all; }` is what makes the access read-only. It is
-  not enforced by the Odoo addon.
+- `limit_except GET HEAD { deny all; }` restricts HTTP methods; the upstream
+  must enforce read-only behavior. WebSocket upgrades are disabled by default.

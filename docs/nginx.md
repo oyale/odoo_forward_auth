@@ -52,22 +52,13 @@ location ^~ /app/ {
     proxy_set_header Cookie "";
     proxy_set_header Authorization "";
     proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection $connection_upgrade;
+    proxy_set_header Upgrade "";
+    proxy_set_header Connection "";
 }
 ```
 
-`map` must be defined in the `http` context (not inside `server`/`location`):
-
-```nginx
-map $http_upgrade $connection_upgrade {
-    default upgrade;
-    ''      close;
-}
-```
-
-- `limit_except GET HEAD { deny all; }` is the read-only switch. Put
-  authorization in Odoo, method restrictions in Nginx.
+- `limit_except GET HEAD { deny all; }` restricts HTTP methods. The upstream
+  must enforce read-only behavior too: GET handlers can have side effects.
 - `proxy_set_header Cookie "";` keeps the Odoo session out of the protected
   service.
 - `proxy_set_header Authorization "";` keeps any client credential out of the
@@ -77,9 +68,22 @@ map $http_upgrade $connection_upgrade {
 
 ## WebSockets
 
-`auth_request` runs on the upgrade handshake. Pass `Upgrade` and `Connection`
-explicitly and use HTTP/1.1; Nginx does not forward hop-by-hop headers by
-default.
+The example disables upgrades explicitly. Only enable WebSockets after reviewing
+application permissions and Origin validation. HTTP method restrictions apply
+only to the handshake; subsequent messages can perform writes. Authorization is
+not repeated for messages. See [revocation](security.md#connections-survive-revocation).
+
+For an application that requires WebSockets, define this in the `http` context:
+
+```nginx
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+```
+
+Then replace the empty Upgrade and Connection headers in the protected location
+with `$http_upgrade` and `$connection_upgrade`, respectively.
 
 ## Optional: redirect to the Odoo login
 
