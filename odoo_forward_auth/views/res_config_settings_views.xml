@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.form.inherit.odoo.forward.auth</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Forward Auth" name="odoo_forward_auth">
+                    <block title="Forward Auth">
+                        <setting
+                            string="Authorized group"
+                            help="Only members of this group may pass the Nginx forward-auth check. Required: with no group, every request is denied."
+                        >
+                            <field name="odoo_forward_auth_group_id" />
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

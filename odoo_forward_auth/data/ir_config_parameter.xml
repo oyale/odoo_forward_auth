@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="param_group_id" model="ir.config_parameter">
+            <field name="key">odoo_forward_auth.group_id</field>
+            <field name="value" />
+        </record>
+    </data>
+</odoo>
