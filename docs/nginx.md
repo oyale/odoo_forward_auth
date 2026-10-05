@@ -42,6 +42,7 @@ location ^~ /app/ {
     limit_except GET HEAD { deny all; }
     proxy_pass http://127.0.0.1:8025;
     proxy_set_header Cookie "";
+    proxy_set_header Authorization "";
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "Upgrade";
@@ -52,6 +53,8 @@ location ^~ /app/ {
   authorization in Odoo, method restrictions in Nginx.
 - `proxy_set_header Cookie "";` keeps the Odoo session out of the protected
   service.
+- `proxy_set_header Authorization "";` keeps any client credential out of the
+  protected service, matching the `security.md` rule.
 - Strip the prefix by using a trailing slash on `proxy_pass` if the upstream does
   not expect it; keep the prefix if the upstream is configured to serve under it.
 
